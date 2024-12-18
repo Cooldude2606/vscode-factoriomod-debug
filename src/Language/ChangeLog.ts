@@ -22,6 +22,7 @@ export class ChangeLogLanguageService {
 		let seenStartLast = false;
 		let seenDate = false;
 		let seenCategory = false;
+		let seenLines = new Map<string, Range>();
 		for (let i = 0; i < changelog.length; i++) {
 			let line = changelog[i];
 			if (line.match(/^-+$/)) {
@@ -82,6 +83,7 @@ export class ChangeLogLanguageService {
 				seenStartLast = true;
 				seenDate = false;
 				seenCategory = false;
+				seenLines.clear();
 			} else if (seenStart) {
 				if (line.startsWith("Version: ")) {
 					diags.push({
@@ -157,6 +159,26 @@ export class ChangeLogLanguageService {
 							range: { start: { line: i, character: 0 }, end: { line: i, character: line.length }},
 						});
 					}
+
+					const seen = seenLines.get(line);
+					if (seen) {
+						diags.push({
+							message: "Duplicate entry",
+							code: "other.duplicate",
+							source: "factorio-changelog",
+							severity: DiagnosticSeverity.Error,
+							range: { start: { line: i, character: 0 }, end: { line: i, character: line.length }},
+							relatedInformation: [
+								{
+									message: "First defined here",
+									location: { range: seen, uri: textDocument.uri },
+								}
+							]
+						});
+					} else {
+						seenLines.set(line, { start: { line: i, character: 0 }, end: { line: i, character: line.length }})
+					}
+
 				} else if (line.length > 0) {
 					seenStartLast = false;
 					diags.push({

@@ -209,6 +209,14 @@ suite("LSP", ()=>{
 			expect(diags.diagnostics[0].code).equals("other.blank");
 		});
 
+
+		test("line-duplicate", async function() {
+			const diags = await waitForNotification(PublishDiagnosticsNotification.type);
+			expect(diags.uri).equals(doc.uri);
+			expect(diags.diagnostics).length(1);
+			expect(diags.diagnostics[0].code).equals("other.duplicate");
+		});
+
 		test("line-format", async function() {
 			const diags = await waitForNotification(PublishDiagnosticsNotification.type);
 			expect(diags.uri).equals(doc.uri);

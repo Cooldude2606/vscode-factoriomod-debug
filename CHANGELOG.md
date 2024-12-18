@@ -5,6 +5,7 @@
 ## 2.0.5
 * Changelog LSP:
   * updated list of categories
+  * warning for duplicate lines
 * Debugger:
   * fix unclear error when indexing invalid fields on some hooked API objects
   * fix on_event hook incorrectly erroring on Custom Input/Custom Event prototype registrations
