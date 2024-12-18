@@ -128,7 +128,7 @@ export class ChangeLogLanguageService {
 							range: { start: { line: i, character: line.length-1 }, end: { line: i, character: line.length }},
 						});
 					}
-					if (!line.match(/^  (((Major|Minor) )?Features|Graphics|Sounds|Optimi[sz]ations|(Combat )?Balancing|Circuit Network|Changes|Bugfixes|Modding|Scripting|Gui|Control|Translation|Debug|Ease of use|Info|Locale|Other):?$/)) {
+					if (!line.match(/^  (((Major|Minor) )?Features|Graphics|Sounds|Optimizations|(Combat )?Balancing|Circuit Network|Changes|Bugfixes|Modding|Scripting|Gui|Control|Translation|Debug|Ease of use|Info|Locale|Compatibility|Other):?$/)) {
 						diags.push({
 							message: "Non-standard category names will be placed after \"All\"",
 							code: "category.nonstandard",

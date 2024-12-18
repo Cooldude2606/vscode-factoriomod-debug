@@ -37,7 +37,7 @@
 			}
 		},
 		{
-			"match": "^  (((Major|Minor) )?Features|Graphics|Sounds|Optimi[sz]ations|(Combat )?Balancing|Circuit Network|Changes|Bugfixes|Modding|Scripting|Gui|Control|Translation|Debug|Ease of use|Info|Locale|Other):$",
+			"match": "^  (((Major|Minor) )?Features|Graphics|Sounds|Optimizations|(Combat )?Balancing|Circuit Network|Changes|Bugfixes|Modding|Scripting|Gui|Control|Translation|Debug|Ease of use|Info|Locale|Compatibility|Other):?$",
 			"captures": {
 				"1": {
 					"name": "entity.name.class.factorio-changelog"
