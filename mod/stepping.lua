@@ -847,7 +847,7 @@ if rawscript then
 
   ---@type metatable_debug
   local newscriptmeta = {
-    __index = rawscript,
+    __index = function(t,k) return rawscript[k] end,
     ---@param t table
     ---@param k any
     ---@param v any
@@ -877,7 +877,7 @@ if rawscript then
 
   ---@type metatable_debug
   local newcommandsmeta = {
-    __index = rawcommands,
+    __index = function(t,k) return rawcommands[k] end,
     ---@param t table
     ---@param k any
     ---@param v any
@@ -916,7 +916,7 @@ if rawscript then
 
   ---@type metatable_debug
   local remotemeta = {
-    __index = rawremote,
+    __index = function(t,k) return rawremote[k] end,
     ---@param t table
     ---@param k any
     ---@param v any
