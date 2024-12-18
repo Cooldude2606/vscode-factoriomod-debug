@@ -662,14 +662,15 @@ if rawscript then
   ---@type table<string,function>
   local hashandler = {}
 
-  ---@type {[defines.events|uint|string]:function}
+  ---@type {[defines.events]:function}
   local event_handler = {}
-  ---@param id defines.events|string
+  ---@param id LuaEventType
   ---@param f? function
   ---@return function?
   ---@package
   local function save_event_handler(id,f)
-    event_handler[id] = f
+    local rawid = rawscript.get_event_id(id)
+    event_handler[rawid] = f
     return f
   end
 
@@ -752,11 +753,12 @@ if rawscript then
     end
   end)
 
-  ---@param event defines.events|number|string
+  ---@param event LuaEventType
   ---@param data EventData
   ---@return ...
   function dispatch.__inner.raise_event(event,data)
-    local f = event_handler[event]
+    local rawid = rawscript.get_event_id(event)
+    local f = event_handler[rawid]
     if f then
       return f(data)
     end
@@ -822,11 +824,9 @@ if rawscript then
         end
       end
       return rawscript.on_event(event,labelhandler(save_event_handler(event,f), sformat("%s handler",evtname)),...)
-    elseif etype == "string" then
-      if has_filters then
-        error("Filters can only be used when registering single events.",2)
-      end
-      return rawscript.on_event(event,labelhandler(save_event_handler(event,f), sformat("%s handler",event)))
+    elseif etype == "string" or etype == "userdata" then
+      ---@cast event string|LuaCustomInputPrototype|LuaCustomEventPrototype
+      return rawscript.on_event(event,labelhandler(save_event_handler(event,f), sformat("%s handler",event)),...)
     elseif etype == "table" then
       if has_filters then
         error("Filters can only be used when registering single events.",2)
