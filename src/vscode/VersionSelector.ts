@@ -256,7 +256,7 @@ export class FactorioVersionSelector {
 				return fv.onlineDocs
 			}
 
-			return (await this.tryJsonDocs(fv))?.application_version
+			return (await this.tryJsonDocs(fv, false))?.application_version ?? "unknown"
 		}
 
 		const qpresult = await vscode.window.showQuickPick(Promise.all([
@@ -403,7 +403,12 @@ export class FactorioVersionSelector {
 				(os.platform() === "darwin") ? "../../doc-html/runtime-api.json" :
 				"../../../doc-html/runtime-api.json"
 			);
-			docjson = (await fs.readFile(docpath)).toString();
+			try {
+				docjson = (await fs.readFile(docpath)).toString();
+			} catch (error) {
+				if (!throwOnError) { return; }
+				throw error;
+			}
 		}
 
 		const docsettings = await vscode.workspace.getConfiguration("factorio").get<DocSettings>("docs", {});
